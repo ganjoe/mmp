@@ -29,12 +29,13 @@ search_request = {'type':'STOCK',
                   'id':''}
 # suche nach ticker und währung
 
-ergebnis =stocksearch({'ticker':'MSF'})
+ergebnis =stocksearch({'ticker':'MS'})
 
 for values, row in dft.iterrows():
     ergebnis =stocksearch({'ticker':row['ticker']})
     if len(ergebnis) > 0:
         dft.loc[values,['isin']]= ergebnis[0]
+
 
 
 

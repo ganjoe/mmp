@@ -52,3 +52,10 @@ def searchTickerInStocks(search_request):
     else:
         print( 'ticker gefunden: ', len(products))
     return products
+
+# request_lookup = ProductSearch.RequestStocks(search_text='MS')
+# products_lookup = trading_api.product_search(request=request_lookup, raw=False)
+# products_lookup_dict = payload_handler.message_to_dict(message=products_lookup)
+# products = products_lookup_dict['products']
+
+
