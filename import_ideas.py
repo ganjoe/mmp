@@ -1,14 +1,56 @@
-###############################
-#
-# https://www.hedgefundtelemetry.com/trade-ideas/
-# excel-tabelle erstellen: "ideas.xlxs" alle spalten als text formatieren
-# die tabelle per copy und paste einfügen. 
-# die erste zeile enthält mindestens die  header:
-# Symbol	Issue	Position    Stop 	Current Weight of Portfolio (%)
-#
-# Folgene Spalten werden 1:1 in transfer.xlxs übernommen
-# Symbol -> ticker  (z.b. TSLA)
-# Issue -> basiswert ( z.b. Alphabet Inc Class A )
-# Position -> side ( short oder long auf basiswert)
-# Current...-> soll ( prozentuale gewichtung)
+
+import pandas as pd
+from mmp_utils import searchTickerInStocks as stocksearch
+
+source_file = 'ideas.xlsx'
+target_file = 'transfer.xlsx'
+
+try:
+    dfs = pd.read_excel(source_file)
+except:
+    print("datei kann nicht geöffnet werden " , source_file)
+    
+dft = pd.DataFrame({'ticker':[], 'basiswert':[], 'side':[], 'soll':[], 'proxy':[], 'isin':[]})
+dft['ticker'] = dfs['Symbol']
+dft['basiswert'] = dfs['Issue']
+dft['side'] = dfs['Position']
+dft['soll'] = dfs['Current Weight of Portfolio (%)']
+dft['stoploss'] = dfs['Stop']
+
+for values, row in dft.iterrows():
+    try:    dft.loc[values,['soll']] = dft['soll'][values].strip('%')
+    except:    pass
+
+search_request = {'type':'STOCK',
+                  'isin':'', 
+                  'currency':'',
+                  'ticker':'MSFT',
+                  'name':'',
+                  'id':''}
+# suche nach ticker und währung
+
+ergebnis =stocksearch({'ticker':'MSF'})
+
+for values, row in dft.iterrows():
+    ergebnis =stocksearch({'ticker':row['ticker']})
+    if len(ergebnis) > 0:
+        dft.loc[values,['isin']]= ergebnis[0]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
